@@ -67,7 +67,7 @@ export default function HomePage() {
     <>
         <Navbar></Navbar>
        
-        <div className='flex justify-between'>
+        <div className='flex justify-end'>
         
         <input className='input input-bordered input-secondary w-full max-w-xs my-8 mx-8' onChange={(e)=>{setSearch(e.target.value)}} placeholder='Search'></input>
 

@@ -56,7 +56,7 @@ export default function EditProduct() {
   return (
     <>
       <Navbar />
-      <div className="h-screen">
+      <div className="h-calc[(100vh-200px)]">
       
         <div className="flex justify-center my-10">
         <h1 className="text-4xl font-bold">แก้ไขรายการหนังสือ</h1>
@@ -74,7 +74,7 @@ export default function EditProduct() {
 
               <input
                 type="Text"
-                className="input input-bordered w-full max-w-xs"
+                className="input input-bordered w-full max-w-xs "
                 value={name}
                 onChange={(e) => setName(e.target.value)}
               />

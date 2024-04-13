@@ -65,27 +65,13 @@ const navigate = useNavigate();
 
     
   }
- const popUp =()=>{
-  Swal.fire({
-    title: "ต้องการบันทึกข้อมูลหรือไม่?",
-    icon: "info",
-    showConfirmButton: true,
-    showCancelButton: true,
-  }).then((result) => {
-    /* Read more about isConfirmed, isDenied below */
-    if (result.isConfirmed) {
-      Swal.fire("Saved!", "", "success");
-    } else if (result.isDenied) {
-      return;
-    }
-  });
- }
+ 
   return (
     <>
       <Navbar />
       <div className="h-calc[(100vh-100px)]">
         <div className="flex justify-center my-10">
-          <h1 className="text-4xl italic">เพิ่มรายการหนังสือ</h1>
+          <h1 className="text-2xl btn btn-outline btn-primary btn-active">เพิ่มรายการหนังสือ</h1>
         </div>
         <div className="flex  justify-center items-center  ">
           <div className="grid grid-cols-2  gap-x-10 gap-y-20">
@@ -141,7 +127,7 @@ const navigate = useNavigate();
               </svg>
 
               <select className="select  select-sm w-full max-w-xs" value={category} onChange={(e) => setCategory(e.target.value)} required>
-              <option disabled selected>หมวดหมู่</option>
+              <option   selected>หมวดหมู่</option>
                 <option value="นิยาย">นิยาย</option>
                 <option value="การ์ตูน">การ์ตูน</option>
                 <option value="อีบุ๊ก">อีบุ๊ก</option>

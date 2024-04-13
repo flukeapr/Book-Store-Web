@@ -1,9 +1,12 @@
-import React from 'react'
+import { useEffect,useState } from 'react'
 import { Link, useNavigate ,useLocation} from "react-router-dom";
 import { useUserAuth } from "../context/UserAuthenContext";
+import { store } from '../config/Firebase';
+import { getDownloadURL,ref } from 'firebase/storage';
 
 export default function Navbar() {
     const { logOut,user } = useUserAuth();
+    const [image,setImage] = useState();
     let navigate = useNavigate();
     const location = useLocation();
     const handleLogout = async () => {
@@ -14,6 +17,22 @@ export default function Navbar() {
         console.log(error.message);
       }
     }
+
+    const handleImage = async () => {
+    
+      const storeRef = ref(store, `Users/${user.uid}.jpg`);
+      const imageRef = await getDownloadURL(storeRef);
+
+      
+
+     
+      setImage(imageRef);
+    
+  };
+  useEffect(() => {
+    handleImage();
+    
+  });
   return (
     <div className="navbar bg-primary">
   <div className="flex-1">
@@ -48,7 +67,7 @@ export default function Navbar() {
     <div className="dropdown dropdown-end">
       <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
         <div className="w-10 rounded-full">
-          <img alt="Tailwind CSS Navbar component" src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+          <img alt="" src={image} />
         </div>
       </div>
       

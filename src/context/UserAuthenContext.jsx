@@ -32,7 +32,7 @@ function logOut(){
         const unsubscribe = onAuthStateChanged(Firebase_Auth,(currentUser)=>{
             console.log("Auth",currentUser)
             setUser(currentUser);
-            console.log(user.uid)
+            
         })
         return ()=>{
             unsubscribe();

@@ -17,6 +17,7 @@ import ProtectedRoute from './Auth/ProtectedRoute.jsx';
 import Insert from './components/Insert.jsx';
 import Dashboard from './components/Dashboard.jsx';
 import EditProduct from './components/EditProduct.jsx';
+import Alluser from './components/Alluser.jsx';
 
 const router = createBrowserRouter([
   {
@@ -46,7 +47,12 @@ const router = createBrowserRouter([
   {
     path: "/homepage/edit/:id",
     element: <ProtectedRoute><EditProduct /></ProtectedRoute>,
+  },
+  {
+    path: "/dashboard/allusers",
+    element: <ProtectedRoute><Alluser /></ProtectedRoute>,
   }
+
 
 ])
 
