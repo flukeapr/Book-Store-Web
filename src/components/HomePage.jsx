@@ -81,6 +81,7 @@ export default function HomePage() {
           </button>
         </div>
       ) : (
+        /////
         <div className="grid grid-cols-4 gap-4 mx-10 my-5 ">
           {products
             .filter((prod) => {
