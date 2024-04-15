@@ -1,6 +1,6 @@
-import React from 'react'
+
 import { createContext,useContext,useState,useEffect } from 'react'
-import { createUserWithEmailAndPassword,signInWithEmailAndPassword,getAuth,signOut,onAuthStateChanged } from 'firebase/auth'
+import { createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut,onAuthStateChanged } from 'firebase/auth'
 import { Firebase_Auth } from '../config/Firebase';
 import Swal from 'sweetalert2';
 
@@ -9,7 +9,7 @@ export  function UserAuthContextProvider({children}) {
 
 const [user,setUser] = useState({});
 function Login(Email,Password){
-   if(Email&& Password && Email !== 'testweb@gmail.com'){
+   if(Email&& Password && Email !== 'man@gamil.com'){
     Swal.fire({
         icon: "error",
         title: "Oops...",

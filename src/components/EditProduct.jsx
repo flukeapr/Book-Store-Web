@@ -3,9 +3,9 @@ import Navbar from "./Navbar";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { useParams } from "react-router-dom";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc,setDoc } from "firebase/firestore";
 import { db } from "../config/Firebase";
-import {  ref, listAll,getDownloadURL } from "firebase/storage";
+import {  ref,getDownloadURL } from "firebase/storage";
 
 import { store } from "../config/Firebase";
 
@@ -13,12 +13,12 @@ export default function EditProduct() {
   const [name, setName] = React.useState("");
   const [story, setStory] = React.useState("");
   const [publisher, setPublisher] = React.useState("");
-  const [price, setPrice] = React.useState("");
+  const [price, setPrice] = React.useState(0);
   const [category, setCategory] = React.useState("");
   const [image, setImage] = React.useState("");
   const navigate = useNavigate();
   const { id } = useParams();
-  const ImageRef = ref(store, `Book/${id}.jpg`);
+  
   const getDetail = async () => {
     const docRef = doc(db, "Book", id);
     const docSnap = await getDoc(docRef);
@@ -34,25 +34,56 @@ export default function EditProduct() {
       console.log("No such document!");
     }
   };
+ const updateData = async () => {
+  
+
  
+Swal.fire({
+  title: "ต้องการแก้ไขข้อมูลหรือไม่?",
+  icon: "info",
+  showConfirmButton: true,
+  showCancelButton: true,
+}).then(async(result) => {
+  if (result.isConfirmed) {
+    try {
+      await setDoc(doc(db, "Book", id), {
+        name: name,
+        story: story,
+        publisher: publisher,
+        price: parseFloat(price),
+        category: category,
+      }) 
+      Swal.fire("Saved!", "", "success").then(() => {
+        navigate("/homepage");
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  }else if(result.isDenied){
+    return;
+  }
+
+
+})
+    
+
+ }
 
   const handleImage = async () => {
     
       const storeRef = ref(store, `Book/${id}.jpg`);
       const imageRef = await getDownloadURL(storeRef);
-
-      
-
-     
       setImage(imageRef);
     
   };
+
+  
   useEffect(() => {
     getDetail();
-    
-  });
+    handleImage();
+  },[]);
 
-    handleImage()
+    
   return (
     <>
       <Navbar />
@@ -140,10 +171,12 @@ export default function EditProduct() {
           >
             ย้อนกลับ
           </Link>
-          <button className="btn btn-primary w-1/4  text-xl">บันทึก</button>
+          <button className="btn btn-primary w-1/4  text-xl" onClick={updateData}>บันทึก</button>
         </div>
         </div>
       </div>
     </>
   );
 }
+
+

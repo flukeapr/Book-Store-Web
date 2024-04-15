@@ -18,6 +18,9 @@ import Insert from './components/Insert.jsx';
 import Dashboard from './components/Dashboard.jsx';
 import EditProduct from './components/EditProduct.jsx';
 import Alluser from './components/Alluser.jsx';
+import Listbook from './components/Listbook.jsx';
+import Cart from './components/Cart.jsx';
+import OrderDetails from './components/OrderDetails.jsx';
 
 const router = createBrowserRouter([
   {
@@ -51,7 +54,20 @@ const router = createBrowserRouter([
   {
     path: "/dashboard/allusers",
     element: <ProtectedRoute><Alluser /></ProtectedRoute>,
+  },
+  {
+    path: "/dashboard/allbooks",
+    element: <ProtectedRoute><Listbook /></ProtectedRoute>,
+  },
+  {
+    path: "/dashboard/orderDetail",
+    element: <ProtectedRoute><OrderDetails /></ProtectedRoute>,
+  },
+  {
+    path: "/cart",
+    element: <ProtectedRoute><Cart /></ProtectedRoute>,
   }
+
 
 
 ])

@@ -11,7 +11,7 @@ export default function Insert() {
   const [name, setName] = React.useState("");
   const [story, setStory] = React.useState("");
   const [publisher, setPublisher] = React.useState("");
-  const [price, setPrice] = React.useState("");
+  const [price, setPrice] = React.useState(0);
   const [category, setCategory] = React.useState("");
   const [image , setImage] = React.useState("");
 const navigate = useNavigate();
@@ -36,12 +36,12 @@ const navigate = useNavigate();
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
         try {
-          
+          const priceNumber = parseFloat(price);
           const docRef = await addDoc(collection(db, "Book"), {
             name: name,
             story: story,
             publisher: publisher,
-            price: price,
+            price: priceNumber,
             category: category,
             
           });
@@ -169,7 +169,7 @@ const navigate = useNavigate();
                 />
               </svg>
 
-              <input type="Text" className="grow" placeholder="ราคา" value={price} onChange={(e) => setPrice(e.target.value)} required/>
+              <input type="number" className="grow" placeholder="ราคา" value={price} onChange={(e) => setPrice(e.target.value)} required/>
             </label>
             <label className="input input-bordered flex items-center gap-2">
               <svg
