@@ -1,7 +1,7 @@
 import {useState,useEffect} from 'react'
 import Navbar from './Navbar';
 import { db} from '../config/Firebase';
-import { getDocs ,collection  } from 'firebase/firestore';
+import { getDocs ,collection ,query,orderBy } from 'firebase/firestore';
 import { getDownloadURL , ref, listAll } from 'firebase/storage';
 import { store } from '../config/Firebase';
 
@@ -10,7 +10,9 @@ export default function OrderDetails() {
     const [images , setImages] = useState([]);
     const getOrders = async () => {
         try {
-          const querySnapshot = await getDocs(collection(db, "Orders"));
+          const docRef = collection(db, "Orders");
+          const q = query(docRef, orderBy("date", "desc"));
+          const querySnapshot = await getDocs(q);
           const OrdersData = [];
           querySnapshot.forEach((doc) => {
             OrdersData.push({ id: doc.id, ...doc.data() });

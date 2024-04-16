@@ -1,7 +1,7 @@
 import  { useEffect,useState } from 'react'
 import Navbar from './Navbar';
 import { db } from '../config/Firebase';
-import { getCountFromServer,collection, getDocs, query, limit } from 'firebase/firestore';
+import { getCountFromServer,collection, getDocs, query, limit ,orderBy} from 'firebase/firestore';
 import { Link } from 'react-router-dom';
 import { PieChart, Pie, Legend, Tooltip } from 'recharts';
 import { BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid } from 'recharts';
@@ -34,7 +34,7 @@ export default function Dashboard() {
   const getOrderDetail = async () => {
     try {
       const coll = collection(db, "Orders");
-      const q = query(coll,limit(3));
+      const q = query(coll,orderBy("date", "desc"),limit(3));
     const snapshot = await  getDocs(q);
     
     const Order = [];
