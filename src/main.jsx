@@ -21,6 +21,8 @@ import Alluser from './components/Alluser.jsx';
 import Listbook from './components/Listbook.jsx';
 import Cart from './components/Cart.jsx';
 import OrderDetails from './components/OrderDetails.jsx';
+import Chat from './components/Chat.jsx';
+
 
 const router = createBrowserRouter([
   {
@@ -40,7 +42,7 @@ const router = createBrowserRouter([
     element: <ProtectedRoute><HomePage /></ProtectedRoute>,
   },
   {
-    path: "/homepage/insert",
+    path: "/insert",
     element: <ProtectedRoute><Insert /></ProtectedRoute>,
   },
   {
@@ -66,6 +68,10 @@ const router = createBrowserRouter([
   {
     path: "/cart",
     element: <ProtectedRoute><Cart /></ProtectedRoute>,
+  },
+  {
+    path: "/chat",
+    element: <ProtectedRoute><Chat /></ProtectedRoute>,
   }
 
 
@@ -74,10 +80,14 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    
+      
       <UserAuthContextProvider>
+      
       <RouterProvider router={router}/>
+     
       </UserAuthContextProvider>
+    
+      
         
       
     

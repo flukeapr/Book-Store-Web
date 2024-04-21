@@ -8,13 +8,14 @@ import { db } from "../config/Firebase";
 import { getDownloadURL, listAll } from "firebase/storage";
 import { store } from "../config/Firebase";
 import { ref } from "firebase/storage";
+import LodingMainPage from "./LodingMainPage";
 
 export default function HomePage() {
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState("");
-  const [images, setImages] = useState([]);
+ 
   const [loading, setLoading] = useState(true);
-  if (!images) {
+  if (!products) {
     return (
       <div className="flex justify-center m-10">
         <button className="btn btn-primary">
@@ -38,14 +39,7 @@ export default function HomePage() {
   };
 
   useEffect(() => {
-    listAll(ref(store, "Book")).then((res) => {
-      const promises = res.items.map((item) => getDownloadURL(item));
-      Promise.all(promises).then((urls) => {
-        setImages(urls);
-        setLoading(false); // เมื่อโหลดเสร็จให้เปลี่ยนสถานะ loading เป็น false
-      });
-    });
-    getBooks();
+    getBooks().then(() => setLoading(false));
   }, []);
 
   // useEffect(()=>{
@@ -62,40 +56,30 @@ export default function HomePage() {
   // })
   return (
     <>
-      <Navbar></Navbar>
+      <Navbar onSearch={setSearch}></Navbar>
 
-      <div className="flex justify-end">
-        <input
-          className="input input-bordered border-[#8C0327] w-full max-w-xs my-8 mx-8"
-          onChange={(e) => {
-            setSearch(e.target.value);
-          }}
-          placeholder="Search"
-        ></input>
-      </div>
+      
       {loading ? (
-        <div className="flex justify-center m-10">
-          <button className="btn btn-primary">
-            <span className="loading loading-spinner"></span>
-            loading
-          </button>
-        </div>
+        <LodingMainPage/>
+        //animate-pulse
       ) : (
         /////
-        <div className="grid grid-cols-4 gap-4 mx-10 my-5 ">
+        
+        <div className="grid grid-cols-4 gap-4 mx-10 my-10 max-lg:grid-cols-2">
           {products
             .filter((prod) => {
               if (search == "") {
                 return prod;
-              } else if (prod.name.includes(search)) {
+              } else if (prod.name.includes(search)||prod.category.includes(search)) {
                 return prod;
               }
             })
             .map((prod) => {
               return (
                 <ProductCard
+                  product={prod}
                   name={prod.name}
-                  image={images.find((image) => image.includes(prod.id))}
+                  image={prod.image}
                   id={prod.id}
                   price={prod.price}
                   key={prod.id}
@@ -104,7 +88,9 @@ export default function HomePage() {
               );
             })}
         </div>
+        
       )}
+     
     </>
   );
 }

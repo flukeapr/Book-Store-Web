@@ -3,8 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useUserAuth } from "../context/UserAuthenContext";
 import Swal from "sweetalert2";
 import { db, store } from "../config/Firebase";
-import { doc, setDoc } from "firebase/firestore";
-import { ref, uploadBytes } from "firebase/storage";
+import { addDoc, collection, doc, setDoc,updateDoc } from "firebase/firestore";
+import { ref, uploadBytes,getDownloadURL } from "firebase/storage";
 
 
 export default function Register() {
@@ -42,28 +42,41 @@ export default function Register() {
       return;
     }
     try {
-      await sigUp(Email, Password).then(async(cred) => {
-        const docRef = doc(db, "Users", cred.user.uid);
-        setDoc(docRef, {
-          fullName: fullName,
+      try {
+        const cred = await sigUp(Email, Password);
+        if (!cred.user) {
+          setError(cred.error.message);
+          return;
+        }
+        const uid = cred.user.uid;
+        const docRef = doc(db, "Users", uid);
+        await setDoc(docRef, {
+          fullName,
           address: Address,
           phone: Phone,
         });
-        const storageRef = ref(store, `Users/${cred.user.uid}.jpg`);
-      await uploadBytes(storageRef, image);
-      })
+        const storageRef = ref(store, `Users/${uid}.jpg`); 
+        await uploadBytes(storageRef, image);
+         uploadBytes(storageRef, image);
+        const ImageUrl = await getDownloadURL(storageRef);
+        await updateDoc(docRef, { image: ImageUrl });
+      } catch (error) {
+        setError(error.message);
+        return;
+      }
+
       Swal.fire({
-        title: "สมัครสมาชิกสําเร็จ",
-        text: "ยินดีต้อนรับเข้่าสู่ระบบ",
-        icon: "success"
+        title: "สมัครสมาชิกสำเร็จ",
+        text: "ยินดีต้อนรับเข้าสู่ระบบ",
+        icon: "success",
       });
       
       navigate("/login");
     } catch (err) {
       setError(err.message);
-      setTimeout(() => {
-        setError("");
-      }, 5000);
+      // setTimeout(() => {
+      //   setError("");
+      // }, 5000);
     }
   };
 

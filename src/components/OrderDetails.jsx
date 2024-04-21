@@ -7,7 +7,6 @@ import { store } from '../config/Firebase';
 
 export default function OrderDetails() {
     const [orders, seOrders] = useState([]);
-    const [images , setImages] = useState([]);
     const getOrders = async () => {
         try {
           const docRef = collection(db, "Orders");
@@ -24,22 +23,10 @@ export default function OrderDetails() {
         }
       }
      
-      const handleImage = async () => {
-        try {
-            const listRef = ref(store, "Book");
-            const res = await listAll(listRef);
-            const promises = res.items.map((item) => getDownloadURL(item));
-            const urls = await Promise.all(promises);
-            setImages(urls);
-            
-          } catch (error) {
-            console.error("Error fetching images:", error);
-          }
       
-    };
       useEffect(() => {
         getOrders();
-        handleImage();
+        
       }, []);
   return (
     <>
@@ -60,7 +47,7 @@ export default function OrderDetails() {
         <th>BookName</th>
         <th>Image</th>
         <th>Amount</th>
-        <th></th>
+        <th>Status</th>
       </tr>
     </thead>
     <tbody>
@@ -93,7 +80,8 @@ export default function OrderDetails() {
               </div>
           <td>{ord.quantity}</td>
           <th>
-            <button className="btn btn-ghost btn-xs">details</button>
+            <button className={`btn ${ord.status === "รอชำระเงิน" ? "btn-warning" : "btn-success"}`}> {ord.status}</button>
+           
           </th>
         </tr>
       ))}
@@ -110,7 +98,7 @@ export default function OrderDetails() {
         <th>BookName</th>
         <th>Image</th>
         <th>Amount</th>
-        <th></th>
+        <th>Status</th>
       </tr>
     </tfoot>
     

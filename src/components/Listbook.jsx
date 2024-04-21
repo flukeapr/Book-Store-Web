@@ -10,6 +10,7 @@ export default function Listbook() {
     const [products, setProducts] = useState([]);
     const [images , setImages] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [search, setSearch] = useState("");
     const getBooks = async () => {
         try {
           const querySnapshot = await getDocs(collection(db, "Book"));
@@ -37,7 +38,7 @@ export default function Listbook() {
       }, []);
   return (
     <>
-     <Navbar/>
+     <Navbar onSearch={setSearch}/>
      {loading ? (
  <div className='flex justify-center m-10'>
  <button className="btn btn-primary">
@@ -61,7 +62,7 @@ loading
   </thead>
   <tbody>
     {/* row 1 */}
-    {products.map((prod) => (
+    {products.filter((prod) => prod.name.includes(search)).map((prod) => (
         <tr key={prod.id}>
         
         <td>

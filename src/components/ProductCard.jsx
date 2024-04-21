@@ -5,15 +5,11 @@ import Swal from 'sweetalert2';
 import {  ref, deleteObject } from "firebase/storage";
 import { Link } from "react-router-dom";
 import { useUserAuth } from "../context/UserAuthenContext";
+
 export default function ProductCard(props) {
   const {user} = useUserAuth();
-  function getDate() {
-    const today = new Date();
-    const month = today.getMonth() + 1;
-    const year = today.getFullYear();
-    const date = today.getDate();
-    return `${date}/${month}/${year}`;
-  }
+
+  
   const handleDelete = async()=>{
     const imageRef = ref(store, `Book/${props.id}.jpg`);
     Swal.fire({
@@ -37,7 +33,7 @@ export default function ProductCard(props) {
         return;
       }})
   }
-
+  
   const addToCart = async()=>{
     try {
       const cartRef = collection(db, 'Users', user.uid, 'Cart');
@@ -60,11 +56,11 @@ export default function ProductCard(props) {
           image: props.image,
           price: props.price,
           quantity: 1,
-          date: getDate(),
+          date: new Date(),
           total: props.price
         });
       }
-  
+     
       Swal.fire("Added!", "", "success")
     } catch (error) {
       console.error('Error adding to cart: ', error);

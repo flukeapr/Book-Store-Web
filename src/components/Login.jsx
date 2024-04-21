@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useUserAuth } from "../context/UserAuthenContext";
+import BottomLayer from "./BottomLayer";
 
 
 export default function Login() {
@@ -97,7 +98,7 @@ export default function Login() {
        
     </div>
     </div>
-     <img src='layer.png'></img>
+     <BottomLayer/>
      </>
   );
 }

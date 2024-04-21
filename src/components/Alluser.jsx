@@ -1,13 +1,16 @@
 import {useState,useEffect} from 'react'
 import Navbar from './Navbar';
 import { db} from '../config/Firebase';
-import { getDocs ,collection  } from 'firebase/firestore';
-import { getDownloadURL , ref, listAll } from 'firebase/storage';
+import { getDocs ,collection,deleteDoc ,doc } from 'firebase/firestore';
+import { ref } from 'firebase/storage';
 import { store } from '../config/Firebase';
+import Swal from 'sweetalert2';
+import { deleteObject } from 'firebase/storage';
+import { getAuth,deleteUser } from 'firebase/auth';
 
 export default function Alluser() {
     const [users, setUsers] = useState([]);
-    const [images , setImages] = useState([]);
+    
     const getUsers = async () => {
         try {
           const querySnapshot = await getDocs(collection(db, "Users"));
@@ -21,23 +24,32 @@ export default function Alluser() {
           console.error("Error getting documents: ", error);
         }
       }
-     
-      const handleImage = async () => {
+     const handleDeleteUser = async (id) => {
+      Swal.fire({
+        title: "ต้องการลบข้อมูลผู้ใช้หรือไม่?",
+        icon: "info",
+        showConfirmButton: true,
+        showCancelButton: true,
+      }).then(async(result) => {
+        if (result.isConfirmed) {
         try {
-            const listRef = ref(store, "Users");
-            const res = await listAll(listRef);
-            const promises = res.items.map((item) => getDownloadURL(item));
-            const urls = await Promise.all(promises);
-            setImages(urls);
-            
-          } catch (error) {
-            console.error("Error fetching images:", error);
-          }
+          getAuth().deleteUser(id);
+          await deleteDoc(doc(db, "Users", id));
+          const imageRef = ref(store, `Users/${id}.jpg`);
+          await deleteObject(imageRef);
+          getUsers();
+        } catch (error) {
+          console.error("Error getting documents: ", error);
+        }
+      }else if(result.isDenied){
+        return;
+      }})
+        
+     }
       
-    };
       useEffect(() => {
         getUsers();
-        handleImage();
+       
       }, []);
   return (
     <>
@@ -71,7 +83,7 @@ export default function Alluser() {
             <div className="flex items-center gap-3">
               <div className="avatar">
                 <div className="mask mask-squircle w-12 h-12">
-                  <img src={images.find(image => image.includes(user.id))} alt="" />
+                  <img src={user.image} alt="" />
                 </div>
               </div>
               <div>
@@ -85,7 +97,7 @@ export default function Alluser() {
           </td>
           <td>{user.phone}</td>
           <th>
-            <button className="btn btn-ghost btn-xs">details</button>
+            <button className="btn btn-error" onClick={() => handleDeleteUser(user.id)}>Delete</button>
           </th>
         </tr>
       ))}

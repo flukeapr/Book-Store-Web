@@ -8,7 +8,6 @@ import Swal from "sweetalert2";
 
 export default function Cart() {
   const [products, setProducts] = useState([]);
-  const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [sumQuantity, setSumQuantity] = useState(0);
   const [sumTotal, setSumTotal] = useState(0);
@@ -99,9 +98,9 @@ export default function Cart() {
                     status: "รอชำระเงิน",
                     book_name: product.name,
                     image: product.image,
-                    receiver: querySnapshot.data().fullName,
-                    address: querySnapshot.data().address,
-                    phone: querySnapshot.data().phone,
+                    receiver: fullName,
+                    address: address,
+                    phone:phone,
                     date: new Date(),
                   });
                 });
@@ -148,23 +147,24 @@ export default function Cart() {
         </div>
       ) : (
         <>
-        <div className="flex justify-center my-2">
+        <div className="flex justify-center my-4">
             <div className="btn btn-primary btn-outline w-1/5 text-xl"> สินค้าในตะกร้า</div>
            
         </div>
-          <div className="flex flex-col  my-4 mx-10 border-solid border-2">
+          <div className="flex flex-col  my-4 mx-10 border-solid border-2 rounded-lg">
             {products.map((product) => (
               <div
-                className="flex  w-full h-1/2"
+                className="flex  w-full h-1/2 p-4  "
                 key={product.id}
               >
-                <div className="flex w-4/5">
+                <div className=" flex w-full border-[#8C0327] border-solid border-2 rounded-lg">
+                <div className="flex w-4/5 p-4 ">
                   <img src={product.image}></img>
                   <div className="flex flex-col m-2">
                     <h1 className="text-xl text-[#CE4257]">{product.name}</h1>
-                    <h4 className="text-md ">สำนักพิมพ์ {product.publisher}</h4>
-                    <h4 className="text-md ">ราคา {product.price}</h4>
-                    <h4 className="text-md ">จำนวน {product.quantity}</h4>
+                    
+                    <h4 className="text-lg ">ราคา {product.price} บาท</h4>
+                    <h4 className="text-lg ">จำนวน {product.quantity} ชิ้น</h4>
                   </div>
                 </div>
                 <div className="flex justify-center items-center">
@@ -175,10 +175,13 @@ export default function Cart() {
 
                   </button>
                 </div>
+
+                </div>
+               
               </div>
             ))}
           </div>
-          <div className="w-full  bg-primary flex items-center justify-around p-2">
+          <div className="w-full  bg-primary flex items-center justify-around p-2 mt-10">
             <div>
               <h4 className="text-xl text-center text-[white]">
                 จำนวน {sumQuantity}

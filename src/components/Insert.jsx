@@ -1,11 +1,11 @@
 import React from "react";
 import Navbar from "./Navbar";
 import { Link ,useNavigate} from "react-router-dom";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc,doc, updateDoc} from "firebase/firestore";
 import { db } from "../config/Firebase";
 import Swal from 'sweetalert2';
 import { store } from "../config/Firebase";
-import { ref, uploadBytes } from "firebase/storage";
+import { ref, uploadBytes,getDownloadURL } from "firebase/storage";
 
 export default function Insert() {
   const [name, setName] = React.useState("");
@@ -43,16 +43,24 @@ const navigate = useNavigate();
             publisher: publisher,
             price: priceNumber,
             category: category,
-            
           });
-          
           const imageRef = ref(store, `Book/${docRef.id}.jpg`);
-          uploadBytes(imageRef, image);
-          Swal.fire("Saved!", "", "success").then(() => {
-            navigate("/homepage");
-          });
+          uploadBytes(imageRef, image).then(async()=>{
+            const imageUrl = await getDownloadURL(imageRef);
+            await updateDoc(doc(db, "Book", docRef.id), {
+              image: imageUrl
+            })
+          }).then(()=>{
+            Swal.fire("Saved!", "", "success").then(() => {
+              navigate("/homepage");
+            });
+          }).catch((error)=>{
+            console.log(error);
+          })
+
           
-          console.log("Document written with ID: ", docRef.id);
+          
+          
         } catch (e) {
           console.error("Error adding document: ", e);
         }

@@ -28,6 +28,7 @@ export default function EditProduct() {
       setStory(docSnap.data().story);
       setCategory(docSnap.data().category);
       setPublisher(docSnap.data().publisher);
+      setImage(docSnap.data().image);
       setPrice(docSnap.data().price);
     } else {
       // docSnap.data() will be undefined in this case
@@ -69,18 +70,12 @@ Swal.fire({
 
  }
 
-  const handleImage = async () => {
-    
-      const storeRef = ref(store, `Book/${id}.jpg`);
-      const imageRef = await getDownloadURL(storeRef);
-      setImage(imageRef);
-    
-  };
+
 
   
   useEffect(() => {
     getDetail();
-    handleImage();
+   
   },[]);
 
     
