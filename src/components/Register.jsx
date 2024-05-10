@@ -69,9 +69,9 @@ export default function Register() {
         title: "สมัครสมาชิกสำเร็จ",
         text: "ยินดีต้อนรับเข้าสู่ระบบ",
         icon: "success",
-      });
+      }).then(navigate("/login"));
       
-      navigate("/login");
+      
     } catch (err) {
       setError(err.message);
       // setTimeout(() => {

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useUserAuth } from "../context/UserAuthenContext";
 import BottomLayer from "./BottomLayer";
-
+import Swal from "sweetalert2";
 
 export default function Login() {
   const [Email, setEmail] = useState("");
@@ -14,11 +14,17 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+
     try {
-      await Login(Email, Password);
+      await Login(Email, Password).then(Swal.fire({
+        title: "เข้าสู่ระบบสำเร็จ",
+        text: "ยินดีต้อนรับเข้าสู่ระบบ",
+        icon: "success",
+      }).then(navigate("/homepage")))
       
       
-      navigate("/homepage");
+      
+     
     } catch (err) {
       setError(err.message);
       setTimeout(() => {
