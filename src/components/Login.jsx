@@ -16,11 +16,12 @@ export default function Login() {
     setError("");
 
     try {
-      await Login(Email, Password).then(Swal.fire({
+      await Login(Email, Password).then(()=>
+        Swal.fire({
         title: "เข้าสู่ระบบสำเร็จ",
         text: "ยินดีต้อนรับเข้าสู่ระบบ",
         icon: "success",
-      }).then(navigate("/homepage")))
+      }).then(()=>navigate("/homepage")))
       
       
       

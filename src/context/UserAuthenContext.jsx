@@ -9,7 +9,7 @@ export  function UserAuthContextProvider({children}) {
 
 const [user,setUser] = useState({});
 function Login(Email,Password){
-   if(Email&& Password && Email !== 'man@gamil.com'){
+   if(Email&& Password && Email !== 'store@gmail.com'){
     Swal.fire({
         icon: "error",
         title: "Oops...",

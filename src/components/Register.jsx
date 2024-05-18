@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 import { db, store } from "../config/Firebase";
 import { addDoc, collection, doc, setDoc,updateDoc } from "firebase/firestore";
 import { ref, uploadBytes,getDownloadURL } from "firebase/storage";
-
+import { updateProfile } from "firebase/auth";
 
 export default function Register() {
   const [Email, setEmail] = useState("");
@@ -48,17 +48,24 @@ export default function Register() {
           setError(cred.error.message);
           return;
         }
+       
         const uid = cred.user.uid;
         const docRef = doc(db, "Users", uid);
         await setDoc(docRef, {
-          fullName,
+          fullName:fullName,
           address: Address,
           phone: Phone,
+          uid: uid
         });
         const storageRef = ref(store, `Users/${uid}.jpg`); 
         await uploadBytes(storageRef, image);
-         uploadBytes(storageRef, image);
+         
         const ImageUrl = await getDownloadURL(storageRef);
+        await updateProfile(cred.user, {
+          displayName: fullName,
+          photoURL: ImageUrl,
+        });
+  
         await updateDoc(docRef, { image: ImageUrl });
       } catch (error) {
         setError(error.message);

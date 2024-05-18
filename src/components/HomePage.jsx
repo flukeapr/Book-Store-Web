@@ -15,6 +15,10 @@ export default function HomePage() {
   const [search, setSearch] = useState("");
  
   const [loading, setLoading] = useState(true);
+
+
+
+
   if (!products) {
     return (
       <div className="flex justify-center m-10">
