@@ -1,71 +1,32 @@
-import { useEffect, useState } from "react";
+/* eslint-disable react/prop-types */
 import { Link, useNavigate } from "react-router-dom";
 import { useUserAuth } from "../context/UserAuthenContext";
-import { collection, doc, getDocs, getDoc } from "firebase/firestore";
-import { db } from "../config/Firebase";
-import { useCountCart } from "../context/CartCount";
+import Swal from "sweetalert2";
+
 
 export default function Navbar({ onSearch }) {
   const { logOut, user } = useUserAuth();
-  const [image, setImage] = useState();
-
-  const [total, setTotal] = useState(0);
-  const [quantity, setQuantity] = useState(0);
   let navigate = useNavigate();
-  const countCart = useCountCart(user);
 
-  // const getCountCart =async () => {
-  //   try {
-  //     const cartRef = doc(db, "Users", user.uid);
-  //  await getCountFromServer(collection(cartRef,"Cart")).then((snapshot) => {
-
-  //     setCountCart(snapshot.data().count);
-
-  //   });
-  //   } catch (error) {
-  //     console.log("Error getting documents: ", error);
-  //   }
-
-  // }
-  const getTotal = async () => {
-    try {
-      const cartRef = collection(db, "Users", user.uid, "Cart");
-      const querySnapshot = await getDocs(cartRef);
-
-      let total = 0;
-      let quantity = 0;
-
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        total += data.price * data.quantity;
-        quantity += data.quantity;
-      });
-
-      setTotal(total);
-      setQuantity(quantity);
-    } catch (error) {
-      console.log("Error getting documents: ", error);
-    }
-  };
   const handleLogout = async () => {
     try {
-      await logOut();
-      navigate("/");
+      await logOut().then(()=>{
+        Swal.fire({
+          icon: "success",
+          title: "Logout successfully",
+          showConfirmButton: false,
+          timer: 1500,
+        }).then(()=>{
+          navigate("/")
+        })
+      })
+      
     } catch (error) {
       console.log(error.message);
     }
   };
 
-  const handleImage = async () => {
-    await getDoc(doc(db, "Users", user.uid)).then((snapshot) => {
-      setImage(snapshot.data().image);
-    });
-  };
-  useEffect(() => {
-    handleImage();
-
-    getTotal();
-  });
+  
   return (
     <div className="navbar bg-primary">
       <div className="flex-1">
@@ -107,17 +68,29 @@ export default function Navbar({ onSearch }) {
                   Chat
                 </Link>
               </li>
+              <li className='mt-[620px]' onClick={handleLogout}>
+            {/* Page content here */}
+            <label
+              
+              className="btn btn-primary tn-ghost text-xl text-white"
+            ><ion-icon name="log-out-outline"></ion-icon>
+              SignOut
+            </label>
+          </li>
             </ul>
+           
           </div>
+          
         </div>
+        
       </div>
       <input
-        className="input input-bordered border-[#8C0327] w-full max-w-xs "
+        className="input input-bordered border-[#8C0327] w-full max-w-xs mx-2"
         placeholder="Search"
         onChange={(e) => onSearch(e.target.value)}
       ></input>
       <div className="flex-none gap-2">
-        <div className="flex-none">
+        {/* <div className="flex-none">
           <div className="dropdown dropdown-end">
             <div
               tabIndex={0}
@@ -159,7 +132,7 @@ export default function Navbar({ onSearch }) {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
         <div className="text-white">{user?.email}</div>
         <div className="dropdown dropdown-end">
           <div
@@ -168,11 +141,16 @@ export default function Navbar({ onSearch }) {
             className="btn btn-ghost btn-circle avatar"
           >
             <div className="w-10 rounded-full">
-              <img alt="" src={image} />
+              {user ? (
+                <img alt="" src={user?.photoURL} />
+              ):(
+                <img alt="" src='ProfileThumbnail.png' />
+              )}
+              
             </div>
           </div>
 
-          <ul
+          {/* <ul
             tabIndex={0}
             className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
           >
@@ -185,7 +163,7 @@ export default function Navbar({ onSearch }) {
             <li>
               <a onClick={handleLogout}>Logout</a>
             </li>
-          </ul>
+          </ul> */}
         </div>
       </div>
     </div>

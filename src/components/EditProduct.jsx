@@ -5,9 +5,7 @@ import Swal from "sweetalert2";
 import { useParams } from "react-router-dom";
 import { doc, getDoc,setDoc } from "firebase/firestore";
 import { db } from "../config/Firebase";
-import {  ref,getDownloadURL } from "firebase/storage";
 
-import { store } from "../config/Firebase";
 
 export default function EditProduct() {
   const [name, setName] = React.useState("");
@@ -81,8 +79,9 @@ Swal.fire({
     
   return (
     <>
+    
       <Navbar />
-      <div className="h-calc[(100vh-200px)]">
+      <div className="h-calc[(100vh-200px)] ">
       
         <div className="flex justify-center my-10">
         <h1 className="text-4xl font-bold">แก้ไขรายการหนังสือ</h1>
@@ -158,6 +157,8 @@ Swal.fire({
             </div>
           
         </div>
+        
+       
         <div className="flex justify-center w-full">
         <div className="flex my-10 w-1/2 justify-center ">
           <Link

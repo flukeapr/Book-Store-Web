@@ -69,7 +69,7 @@ export default function HomePage() {
       ) : (
         /////
         
-        <div className="grid grid-cols-4 gap-4 mx-10 my-10 max-lg:grid-cols-2">
+        <div className="grid max-sm:grid-cols-1 max-md:grid-cols-2 max-lg:grid-cols-2 grid-cols-4 gap-4 mx-10 my-10 ">
           {products
             .filter((prod) => {
               if (search == "") {

@@ -4,7 +4,9 @@ import { useUserAuth } from "../context/UserAuthenContext";
 import { collection,query,where,getDocs,doc,addDoc } from "firebase/firestore";
 import { db } from "../config/Firebase";
 import ChatScreen from "./ChatScreen";
-import { MessageList,Input } from 'react-chat-elements'
+import { MessageList,Input } from 'react-chat-elements';
+import { useLocation } from "react-router-dom";
+
 export default function Chat() {
   const {user} = useUserAuth();
   const [users,setUsers] = useState([]);
@@ -12,6 +14,7 @@ export default function Chat() {
   const [userId ,setUserId]= useState('');
   const [imageSelect ,setImageSelect] = useState('');
   const chatContainerRef  = useRef(null);
+  const location = useLocation();
   const getUsers = async () => {
     try {
       if (!user || !user.uid) {
@@ -36,7 +39,7 @@ export default function Chat() {
   useEffect(()=>{
       getUsers();
       
-  },[userSelect])
+  },[userSelect,location])
 
 
   function generateId(length = 20) {
@@ -88,7 +91,7 @@ const ChatId = generateId();
       <Navbar />
       <div className="w-screen flex">
         <div className="h-[calc(100vh-145px)] p-4  m-2 w-screen flex">
-          <div className="w-1/5  border-solid border-2 rounded-xl">
+          <div className="w-1/5  border-solid border-2 rounded-xl bg-white">
             <div className="w-full h-16 bg-primary rounded-tr-xl rounded-tl-xl">
               <span className="italic flex justify-center items-center h-full text-2xl text-white">
                 chat
@@ -96,7 +99,7 @@ const ChatId = generateId();
             </div>
             {users.map((item) => (
               <div
-                className="w-full h-16 flex p-4 items-center bg-[white] rounded-md mt-2"
+                className="w-full h-16 flex p-4 items-center  shadow-2xl my-2  rounded-2xl mt-2"
                 onClick={() => {
                   setUserSelect(item.fullName);
                   setUserId(item.uid);
@@ -116,36 +119,39 @@ const ChatId = generateId();
           <div className="w-4/5 shadow-lg border-solid border-2 mx-2 rounded-xl ">
             <div className="flex items-center justify-center h-20 bg-primary  rounded-tl-xl  rounded-tr-xl">
               <div className="text-[white] text-lg font-bold">
-                {userSelect ? userSelect : "Chat"}
+                {userSelect ? userSelect :  <span className="italic flex justify-center items-center h-full text-2xl text-white">
+                chat
+              </span>}
               </div>
             </div>
-            <div ref={chatContainerRef}  className='h-[calc(100vh-300px)] overflow-y-auto'>
+            <div ref={chatContainerRef}  className='h-[calc(100vh-300px)] overflow-y-auto bg-white'>
               {userSelect ? (
                 <ChatScreen id={userId} image={imageSelect} name={userSelect} />
               ) : (
                 <div className="flex items-center justify-center h-full text-primary font-medium">
-                  เลือกผูใช้เพื่อแสดงข้อความ
+                  เลือกผู้ใช้เพื่อแสดงข้อความ
                 </div>
               )}
             </div>
-            <Input
-                placeholder='Type here...'
-                multiline={true}
-                autofocus={true}
-                onKeyPress={(e) => {
-                  if (e.key === 'Enter' && e.shiftKey === false) {
-                    onSend(e.target.value);
-                    e.target.value = '';
-                }
-                }}
-                inputStyle={
-                 {
-                  color:'white',
-                  backgroundColor:'#8c0327'
-                 }
-                 
-                }
-                />  
+            {userSelect ? (
+               <Input
+               placeholder='Type here...'
+               multiline={true}
+               autofocus={true}
+               onKeyPress={(e) => {
+                 if (e.key === 'Enter' && e.shiftKey === false) {
+                   onSend(e.target.value);
+                   e.target.value = '';
+               }
+               }}
+             
+               />  
+            ):(
+              <div className="flex w-full bg-white">
+                  
+                </div>
+            )}
+           
           </div>
         </div>
       </div>

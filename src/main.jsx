@@ -6,9 +6,6 @@ import { UserAuthContextProvider } from './context/UserAuthenContext.jsx';
 import {
   createBrowserRouter,
   RouterProvider,
-  Route,
-  Link,
-  BrowserRouter 
 } from "react-router-dom";
 import Login from './components/Login.jsx';
 import Register from './components/Register.jsx';

@@ -2,13 +2,12 @@ import {useState,useEffect} from 'react'
 import Navbar from './Navbar';
 import { db} from '../config/Firebase';
 import { getDocs ,collection  } from 'firebase/firestore';
-import { getDownloadURL , ref, listAll } from 'firebase/storage';
-import { store } from '../config/Firebase';
+
 
 
 export default function Listbook() {
     const [products, setProducts] = useState([]);
-    const [images , setImages] = useState([]);
+    
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState("");
     const getBooks = async () => {
@@ -25,17 +24,9 @@ export default function Listbook() {
         }
       }
       useEffect(() => {
-        getBooks()
+        getBooks().then(()=>setLoading(false))
       }, [])
-      useEffect(() => {
-        listAll(ref(store, "Book")).then((res) => {
-          const promises = res.items.map((item) => getDownloadURL(item));
-          Promise.all(promises).then((urls) => {
-            setImages(urls);
-            setLoading(false); // เมื่อโหลดเสร็จให้เปลี่ยนสถานะ loading เป็น false
-          });
-        });
-      }, []);
+     
   return (
     <>
      <Navbar onSearch={setSearch}/>
@@ -46,7 +37,7 @@ export default function Listbook() {
 loading
 </button>
  </div>
-) : (<div className="overflow-x-auto m-10">
+) : (<div className="overflow-x-auto bg-white p-10 m-0">
 <table className="table">
   {/* head */}
   <thead>
@@ -69,7 +60,7 @@ loading
           <div className="flex items-center gap-3">
             <div className="avatar">
               <div className="mask mask-circle w-24 h-24">
-                <img src={images.find(image => image.includes(prod.id))} alt="" />
+                <img src={prod.image} alt="" />
               </div>
             </div>
             <div>

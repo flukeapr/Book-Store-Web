@@ -15,6 +15,7 @@
     "dotenv": "^16.4.5",
     "firebase": "^10.10.0",
     "flowbite": "^2.3.0",
+    "framer-motion": "^11.2.10",
     "react": "^18.2.0",
     "react-chat-elements": "^12.0.14",
     "react-chat-widget": "^3.1.4",

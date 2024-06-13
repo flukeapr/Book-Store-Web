@@ -1,4 +1,4 @@
-import React from "react";
+/* eslint-disable react/prop-types */
 import { doc, deleteDoc ,addDoc,collection,query,where,updateDoc,increment,getDocs} from "firebase/firestore";
 import { db ,store} from "../config/Firebase";
 import Swal from 'sweetalert2';
